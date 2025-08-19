@@ -7,13 +7,11 @@ const cors = require("cors");
 const app = express();
 
 const allowedOrigins = [process.env.FRONTEND_URL || "http://localhost:3000"];
-app.use(
-  cors({
-    origin: allowedOrigins,
-    methods: ["GET", "POST"],
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: "https://inbred-techno.vercel.app",  // your frontend domain
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
 
 app.use(express.json());
 
