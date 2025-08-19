@@ -89,6 +89,28 @@ app.post("/api/payment/create-order", async (req, res) => {
     res.status(500).json(error.response?.data || { error: "Failed to create Cashfree order" });
   }
 });
+// Verify payment status
+app.get("/api/payment/verify/:orderId", async (req, res) => {
+  try {
+    const { orderId } = req.params;
+
+    const endpoint = `${getCashfreeBaseUrl()}/orders/${orderId}`;
+
+    const headers = {
+      "x-client-id": process.env.CASHFREE_CLIENT_ID,
+      "x-client-secret": process.env.CASHFREE_CLIENT_SECRET,
+      "x-api-version": "2023-08-01",
+      "Content-Type": "application/json",
+    };
+
+    const response = await axios.get(endpoint, { headers });
+
+    res.json(response.data);
+  } catch (error) {
+    console.error("❌ Verification error:", error.response?.data || error.message);
+    res.status(500).json(error.response?.data || { error: "Failed to verify payment" });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
