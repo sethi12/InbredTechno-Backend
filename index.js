@@ -49,7 +49,7 @@ async function createCashfreeOrder({
       customer_phone: customerPhone,
     },
     order_meta: {
-      return_url: `https://inbred-techno.vercel.app/Plan`,
+      return_url: `https://inbred-techno.vercel.app/PlanResult`,
     },
   };
 
