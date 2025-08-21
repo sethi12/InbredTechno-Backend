@@ -30,52 +30,14 @@ function getCashfreeBaseUrl() {
 }
 
 
-// async function createCashfreeOrder({
-//   orderId,
-//   orderAmount,
-//   customerId,
-//   customerEmail,
-//   customerPhone,
-// }) {
-//   const endpoint = `${getCashfreeBaseUrl()}/orders`;
-
-//   const payload = {
-//     order_id: orderId,
-//     order_amount: orderAmount,
-//     order_currency: "INR",
-//     customer_details: {
-//       customer_id: customerId,
-//       customer_email: customerEmail,
-//       customer_phone: customerPhone,
-//     },
-//     order_meta: {
-//       return_url: `https://inbred-techno.vercel.app/PlanResult?order_id={order_id}`,
-//     },
-//   };
-
-//   const headers = {
-//     "x-client-id": process.env.CASHFREE_CLIENT_ID,
-//     "x-client-secret": process.env.CASHFREE_CLIENT_SECRET,
-//     "x-api-version": "2023-08-01",
-//     "Content-Type": "application/json",
-//   };
-// console.log(CASHFREE_CLIENT_ID+"CAshfre id");
-
-//   console.log("🔐 Sending request to:", endpoint);
-
-//   const response = await axios.post(endpoint, payload, { headers });
-//   return response.data;
-// }
 async function createCashfreeOrder({
+  orderId,
   orderAmount,
   customerId,
   customerEmail,
   customerPhone,
 }) {
   const endpoint = `${getCashfreeBaseUrl()}/orders`;
-
-  // ✅ Always generate valid order_id
-  const orderId = `order_${Date.now()}`;
 
   const payload = {
     order_id: orderId,
@@ -87,7 +49,6 @@ async function createCashfreeOrder({
       customer_phone: customerPhone,
     },
     order_meta: {
-      // ✅ Cashfree will replace {order_id} with actual ID
       return_url: `https://inbred-techno.vercel.app/PlanResult?order_id={order_id}`,
     },
   };
@@ -98,17 +59,12 @@ async function createCashfreeOrder({
     "x-api-version": "2023-08-01",
     "Content-Type": "application/json",
   };
+console.log(CASHFREE_CLIENT_ID+"CAshfre id");
 
   console.log("🔐 Sending request to:", endpoint);
-  console.log("📦 Payload:", payload);
 
   const response = await axios.post(endpoint, payload, { headers });
-
-  // return both orderId and payment_session_id so frontend knows what to expect
-  return {
-    ...response.data,
-    order_id: orderId,
-  };
+  return response.data;
 }
 
 app.post("/api/payment/create-order", async (req, res) => {
